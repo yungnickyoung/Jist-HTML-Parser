@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 from bs4.element import Comment
 import urllib.request
+import requests
 
 
 def tag_visible(element):
@@ -16,10 +17,13 @@ def article_text(body):
     texts = soup.findAll(text=True)
 
     visible_texts = filter(tag_visible, texts)
-    article_match = soup.findAll("div", {"class" : "1-full-width"})
+
+    article_match = soup.findAll("div", class_="1-full-width")
     
     return u" ".join(t.strip() for t in visible_texts)
 
 html = urllib.request.urlopen('https://amp-cnn-com.cdn.ampproject.org/c/s/amp.cnn.com/cnn/uk/live-news/brexit-theresa-may-deal-vote-gbr-intl/index.html').read()
 
 print(article_text(html))
+
+requests.get(url = "http://127.0.0.1:5000/summarize/", data = article_text(html).encode("utf-8")) 

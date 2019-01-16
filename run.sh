@@ -1,1 +1,1 @@
-docker run -it --rm --name jist-html-parser-container jist-html-parser-image
+docker run -it --rm -P --name jist-html-parser-container jist-html-parser-image
