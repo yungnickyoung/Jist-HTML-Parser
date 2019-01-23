@@ -22,9 +22,21 @@ def article_text(body):
     
     return u" ".join(t.strip() for t in visible_texts)
 
-html = urllib.request.urlopen('https://amp-cnn-com.cdn.ampproject.org/c/s/amp.cnn.com/cnn/uk/live-news/brexit-theresa-may-deal-vote-gbr-intl/index.html').read()
+def get_article_from_cnn_amp(html):
+    soup = BeautifulSoup(html, 'html.parser')
+    body_text = soup.find('div', class_="body_text")
 
-print(article_text(html))
+    out_text = []
+
+    for paragraph in body_text.find_all('p'):
+        out_text.append(paragraph.text)
+
+    return u" ".join(out_text)
+
+html = urllib.request.urlopen('https://amp-cnn-com.cdn.ampproject.org/c/s/amp.cnn.com/cnn/2019/01/23/politics/donald-trump-nancy-pelosi-government-shutdown-congress/index.html').read()
+
+# print(article_text(html))
+print(get_article_from_cnn_amp(html))
 
 # The container for this app must be on the same docker network as the container for the summarizer service.
 # Furthermore, the summarizer container/service must have the name "jist-summarizer-container"
