@@ -1,1 +1,1 @@
-docker build -t jist-html-parser-image .
+docker build --tag=jist-html-parser-image:v0.0.1 .

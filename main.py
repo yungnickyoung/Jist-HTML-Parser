@@ -26,4 +26,6 @@ html = urllib.request.urlopen('https://amp-cnn-com.cdn.ampproject.org/c/s/amp.cn
 
 print(article_text(html))
 
-requests.get(url = "http://127.0.0.1:5000/summarize/", data = article_text(html).encode("utf-8")) 
+# The container for this app must be on the same docker network as the container for the summarizer service.
+# Furthermore, the summarizer container/service must have the name "jist-summarizer-container"
+requests.get(url = "http://jist-summarizer-container/summarize", data = article_text(html).encode("utf-8")) 
