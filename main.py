@@ -55,6 +55,7 @@ def parseArticle():
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=80)
+    
     #html = urllib.request.urlopen('https://amp-cnn-com.cdn.ampproject.org/c/s/amp.cnn.com/cnn/2019/01/23/politics/donald-trump-nancy-pelosi-government-shutdown-congress/index.html').read()
     #cnn_article = get_body_text(html, 'cnn')
     #print(cnn_article)
