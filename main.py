@@ -23,7 +23,12 @@ def get_article_from_cnn_amp(soup):
     out_text = []
 
     for paragraph in body_text.find_all('p'):
-        out_text.append(paragraph.text)
+        try:
+            out_text.append(paragraph.text)
+        except AttributeError as err:
+            print('ERROR ENCOUNTERED:')
+            print(err)
+            continue
 
     return u" ".join(out_text)
 
@@ -31,8 +36,13 @@ def get_article_from_cnn_amp(soup):
 def get_article_from_huffingtonpost_amp(soup):
     out_text = []
 
-    for body_div in soup.find_all('div', class_='content-list-component'):
-        out_text.append(body_div.p.text)
+    for body_div in soup.find_all('div', class_='yr-content-list-text'):
+        try:
+            out_text.append(body_div.p.text)
+        except AttributeError as err:
+            print('ERROR ENCOUNTERED:')
+            print(err)
+            continue
 
     return u" ".join(out_text)
 
@@ -48,4 +58,4 @@ if __name__ == '__main__':
     # The container for this app must be on the same docker network as the container for the summarizer service.
     # Furthermore, the summarizer container/service must have the name "jist-summarizer-container"
     requests.get(url = "http://jist-summarizer-container/summarize", data = cnn_article.encode("utf-8")) 
-    requests.get(url = "http://jist-summarizer-container/summarize", data = huffpost_article.encode("utf-8")) 
+    requests.get(url = "http://jist-summarizer-container/summarize", data = huffpost_article.encode("utf-8"))
