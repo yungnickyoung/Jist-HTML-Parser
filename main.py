@@ -2,8 +2,7 @@ from bs4 import BeautifulSoup
 from bs4.element import Comment
 import urllib.request
 import requests
-from flask import Flask
-from flask import request
+from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
@@ -42,16 +41,21 @@ def get_article_from_huffingtonpost_amp(soup):
 
 @app.route("/parse", methods = ['POST'])
 def parseArticle():
-    app.logger.info("Parse Request: " + str(request.form))
+    req_data = request.get_json()
 
-    html = urllib.request.urlopen(request.form.get('url')).read()
-    article = get_body_text(html, request.form.get('domain'))
+    html = urllib.request.urlopen(req_data['url']).read()
+    article_text = get_body_text(html, req_data['domain'])
 
-    app.logger.info(article)
+    app.logger.info(article_text)
 
-    requests.get(url = "http://jist-summarizer-container/summarize", data = article.encode("utf-8")) 
+    data = { 'full_text': article_text, 'domain': req_data['domain'] }
 
-    return "200"
+    resp = requests.post(url="http://jist-summarizer-container/summarize", json=data) 
+
+    app.logger.info(str(resp.status_code))
+    app.logger.info(resp.json())
+
+    return jsonify(resp.json())
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=80)
