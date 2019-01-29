@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 from bs4.element import Comment
 
-def get_body_text(html, news_source, app):
+def get_body_text(html, news_source):
     """ Returns the article body text for a given news article html page
 
     Parses out the article text of an html page for a news site, given the news source.
@@ -23,7 +23,7 @@ def get_body_text(html, news_source, app):
     elif news_source == 'huffingtonpost':
         article_body = get_article_from_huffingtonpost_amp(soup)
     elif news_source == 'nytimes':
-        article_body = get_article_from_nytimes_amp(soup, app)
+        article_body = get_article_from_nytimes_amp(soup)
     elif news_source == 'nbcnews':
         article_body = get_article_from_nbcnews_amp(soup)
     elif news_source == 'dailymail':
@@ -44,6 +44,8 @@ def get_body_text(html, news_source, app):
         article_body = get_article_from_reuters_amp(soup)
     elif news_source == 'politico':
         article_body = get_article_from_politico_amp(soup)
+    else:
+        article_body = 'No parsing function available for domain ' + str(news_source)
     
 
     return article_body
@@ -66,7 +68,7 @@ def get_article_from_huffingtonpost_amp(soup):
 
     return u" ".join(out_text)
 
-def get_article_from_nytimes_amp(soup, app):
+def get_article_from_nytimes_amp(soup):
     body_text = soup.find('article')
     out_text = []
 

@@ -14,7 +14,7 @@ def parseArticle():
     app.logger.info('Retrieved url from domain ' + req_data['domain'] + ': ' + req_data['url'] )
 
     html = urllib.request.urlopen(req_data['url']).read()
-    article_text = get_body_text(html, req_data['domain'], app)
+    article_text = get_body_text(html, req_data['domain'])
 
     app.logger.info('Full text:')
     app.logger.info(article_text)
