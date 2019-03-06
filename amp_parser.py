@@ -17,15 +17,6 @@ def amp_cnn(url):
 
     return u" ".join(out_text)
 
-def amp_huffingtonpost(url):
-    html = urllib.request.urlopen(url).read()
-    soup = BeautifulSoup(html, 'html.parser')
-    out_text = []
-    for body_div in soup.find_all('div', class_='content-list-component'):
-        out_text.append(body_div.text)
-
-    return u" ".join(out_text)
-
 def amp_nytimes(url):
     html = urllib.request.urlopen(url).read()
     soup = BeautifulSoup(html, 'html.parser')
@@ -37,13 +28,75 @@ def amp_nytimes(url):
 
     return u" ".join(out_text)
 
-def get_article_from_foxnews_amp(url):
+def amp_huffpost(url):
+    html = urllib.request.urlopen(url).read()
+    soup = BeautifulSoup(html, 'html.parser')
+    out_text = []
+    for body_div in soup.find_all('div', class_='yr-content-list-text'):
+        out_text.append(body_div.text)
+
+    return u" ".join(out_text)
+
+def amp_foxnews(url):
     html = urllib.request.urlopen(url).read()
     soup = BeautifulSoup(html, 'html.parser')
     body_text = soup.find('div', class_='article-body')
     out_text = []
 
     for paragraph in body_text.find_all('p'):
+        out_text.append(paragraph.text)
+
+    return u" ".join(out_text)
+
+def amp_usatoday(url):
+    html = urllib.request.urlopen(url).read()
+    soup = BeautifulSoup(html, 'html.parser')
+    body_text = soup.find_all('div', class_='story-container')
+    out_text = []
+
+    for div in body_text:
+        out_text.append(div.text)
+
+    return u" ".join(out_text)
+
+def amp_reuters(url):
+    html = urllib.request.urlopen(url).read()
+    soup = BeautifulSoup(html, 'html.parser')
+    body_text = soup.find('div', class_='article-text')
+    out_text = []
+
+    for span in body_text.find_all('span', id='articleText'):
+        for paragraph in span.find_all('p'):
+            try:
+                paragraph.span.decompose()
+            except:
+                pass
+            out_text.append(paragraph.text)
+
+    return u" ".join(out_text)
+
+def amp_politico(url):
+    html = urllib.request.urlopen(url).read()
+    soup = BeautifulSoup(html, 'html.parser')
+    body_text = soup.find('article', class_='story-text')
+    out_text = []
+
+    for paragraph in body_text.find_all('p'):
+        out_text.append(paragraph.text)
+
+    return u" ".join(out_text)
+
+def amp_yahoo(url):
+    html = urllib.request.urlopen(url).read()
+    soup = BeautifulSoup(html, 'html.parser')
+    body_text = soup.find('div', class_='caas-body')
+    out_text = []
+
+    for paragraph in body_text.find_all('p'):
+        upper = paragraph.text.upper()
+        if "REPORTING BY" in upper or "WRITING BY" in upper or "THIS ARTICLE" in upper:
+            continue
+
         out_text.append(paragraph.text)
 
     return u" ".join(out_text)
@@ -81,17 +134,6 @@ def amp_theguardian(url):
 
     return u" ".join(out_text)
 
-def amp_wsj(url):
-    html = urllib.request.urlopen(url).read()
-    soup = BeautifulSoup(html, 'html.parser')
-    body_text = soup.find('div', class_='articleBody')
-    out_text = []
-
-    for paragraph in body_text.find_all('p'):
-        out_text.append(paragraph.text)
-
-    return u" ".join(out_text)
-
 def amp_abcnews(url):
     html = urllib.request.urlopen(url).read()
     soup = BeautifulSoup(html, 'html.parser')
@@ -114,17 +156,6 @@ def amp_bbc(url):
 
     return u" ".join(out_text)
 
-def amp_usatoday(url):
-    html = urllib.request.urlopen(url).read()
-    soup = BeautifulSoup(html, 'html.parser')
-    body_text = soup.find_all('div', class_='story-container')
-    out_text = []
-
-    for div in body_text:
-        out_text.append(div.text)
-
-    return u" ".join(out_text)
-
 def amp_latimes(url):
     html = urllib.request.urlopen(url).read()
     soup = BeautifulSoup(html, 'html.parser')
@@ -133,35 +164,21 @@ def amp_latimes(url):
 
     for div in body_text:
         try:
-            out_text.append(div.text)
+            paragraph = div.find('p')
+            out_text.append(paragraph.text)
         except:
             continue
 
     return u" ".join(out_text)
 
-def amp_reuters(url):
-    html = urllib.request.urlopen(url).read()
-    soup = BeautifulSoup(html, 'html.parser')
-    body_text = soup.find('div', class_='article-text')
-    out_text = []
+# def amp_wsj(url):
+#     html = urllib.request.urlopen(url).read()
+#     soup = BeautifulSoup(html, 'html.parser')
+#     body_text = soup.find('div', class_='articleBody')
+#     out_text = []
 
-    for span in body_text.find_all('span', id='articleText'):
-        for paragraph in span.find_all('p'):
-            try:
-                paragraph.span.decompose()
-            except:
-                pass
-            out_text.append(paragraph.text)
+#     for paragraph in body_text.find_all('p'):
+#         out_text.append(paragraph.text)
 
-    return u" ".join(out_text)
+#     return u" ".join(out_text)
 
-def amp_politico(url):
-    html = urllib.request.urlopen(url).read()
-    soup = BeautifulSoup(html, 'html.parser')
-    body_text = soup.find('article', class_='story-text')
-    out_text = []
-
-    for paragraph in body_text.find_all('p'):
-        out_text.append(paragraph.text)
-
-    return u" ".join(out_text)
