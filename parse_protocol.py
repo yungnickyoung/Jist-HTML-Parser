@@ -88,4 +88,7 @@ def parseArticle(domain, ampUrl, desktopUrl):
     except Exception as e:
         raise Exception("Error occurred while parsing article from {0}: {1}".format(url, str(e)))
 
+    if articleBody is None or articleBody == "":
+        raise Exception("Article text returned empty. This article's HTML format may not be supported: {}".format(url))
+
     return articleBody
